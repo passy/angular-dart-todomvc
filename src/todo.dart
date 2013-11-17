@@ -18,6 +18,15 @@ class Item {
 class TodoController {
 	// TODO: Read from localStorage
 	List<Item> items = [];
+	Item newItem = new Item();
+	
+	void add() {
+		print("LOL?");
+		if (!newItem.isEmpty) {
+			items.add(newItem);
+			newItem = new Item();
+		}
+	}
 	
 	int remaining() {
 		return items.where((item) => !item.done).length;

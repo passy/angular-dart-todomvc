@@ -11,8 +11,9 @@
 		<section todo-controller id="todoapp">
 			<header id="header">
 				<h1>todos</h1>
-				<form id="todo-form" ng-submit="todo.addTodo()">
-					<input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
+				<!-- Oh boy, there is no ng-submit yet. :( -->
+				<form id="todo-form" ng-submit="todo.add()" onsubmit="return false">
+					<input id="new-todo" placeholder="What needs to be done?" ng-model="todo.newItem" autofocus>
 				</form>
 			</header>
 			<section id="main" ng-show="todo.items.length" ng-cloak>
