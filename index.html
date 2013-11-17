@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="todomvc">
+<html lang="en" ng-app>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,18 +8,18 @@
 		<style>[ng-cloak] { display: none; }</style>
 	</head>
 	<body>
-		<section id="todoapp" ng-controller="TodoCtrl">
+		<section todo-controller id="todoapp">
 			<header id="header">
 				<h1>todos</h1>
-				<form id="todo-form" ng-submit="addTodo()">
+				<form id="todo-form" ng-submit="todo.addTodo()">
 					<input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
 				</form>
 			</header>
-			<section id="main" ng-show="todos.length" ng-cloak>
+			<section id="main" ng-show="todo.items.length" ng-cloak>
 				<input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul id="todo-list">
-					<li ng-repeat="todo in todos | filter:statusFilter" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+					<li ng-repeat="todo in todo.items | filter:statusFilter" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 						<div class="view">
 							<input class="toggle" type="checkbox" ng-model="todo.completed">
 							<label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
@@ -31,10 +31,12 @@
 					</li>
 				</ul>
 			</section>
-			<footer id="footer" ng-show="todos.length" ng-cloak>
-				<span id="todo-count"><strong>{{remainingCount}}</strong>
-					<ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+			<footer id="footer" ng-show="todo.total()" ng-cloak>
+				<span id="todo-count"><strong>{{todo.remaining()}}</strong>
+					<ng-pluralize count="todo.items" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
 				</span>
+				<!--
+				TODO: Routing :)
 				<ul id="filters">
 					<li>
 						<a ng-class="{selected: location.path() == '/'} " href="#/">All</a>
@@ -46,7 +48,8 @@
 						<a ng-class="{selected: location.path() == '/completed'}" href="#/completed">Completed</a>
 					</li>
 				</ul>
-				<button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed ({{completedCount}})</button>
+				-->
+				<button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="todo.completed() > 0">Clear completed ({{todo.completed()}})</button>
 			</footer>
 		</section>
 		<footer id="info">
@@ -56,5 +59,8 @@
 		<!-- Not using todomvc-common base.js just yet.
 		<script src="bower_components/todomvc-common/base.js"></script>
 		-->
+		<script src="src/main.dart" type="application/dart"></script>
+		<script src="packages/browser/dart.js"></script>
+		<script src="packages/browser/interop.js"></script>
 	</body>
 </html>

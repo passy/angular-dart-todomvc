@@ -24,7 +24,7 @@ module.exports = function (grunt) {
 				tasks: ['dart2js']
 			},
 			livereload: {
-				files: ['**/*.css']
+				files: ['index.html', '**/*.css']
 			}
 		},
 		connect: {
