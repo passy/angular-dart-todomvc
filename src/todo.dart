@@ -17,11 +17,10 @@ class Item {
 )
 class TodoController {
 	// TODO: Read from localStorage
-	List<Item> items = [];
+	List<Item> items = [new Item("wow", false)];
 	Item newItem = new Item();
 	
 	void add() {
-		print("LOL?");
 		if (!newItem.isEmpty) {
 			items.add(newItem);
 			newItem = new Item();

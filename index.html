@@ -5,7 +5,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>AngularJS • TodoMVC</title>
 		<link rel="stylesheet" href="bower_components/todomvc-common/base.css">
-		<style>[ng-cloak] { display: none; }</style>
+		<style>
+			[ng-cloak] { display: none; }
+			.ng-show { display: block; }
+			.ng-hide { display: none; }
+		</style>
 	</head>
 	<body>
 		<section todo-controller id="todoapp">
@@ -32,8 +36,8 @@
 					</li>
 				</ul>
 			</section>
-			<footer id="footer" ng-show="todo.total()" ng-cloak>
-				<span id="todo-count"><strong>{{todo.remaining()}}</strong>
+			<footer id="footer" ng-hide="!todo.total()" ng-cloak>
+				<span id="todo-count" ng-hide="{{!todo.remaining()}}"><strong>{{todo.remaining()}}</strong>
 					<ng-pluralize count="todo.items" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
 				</span>
 				<!--
