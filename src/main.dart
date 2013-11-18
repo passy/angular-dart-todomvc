@@ -7,7 +7,8 @@ main() {
 	print('Booting TodoMVC. Stand back!');
 
 	var module = new Module()
-		..type(TodoController);
+		..type(TodoController)
+		..type(TodoSubmitDirective);
 
 	ngBootstrap(module: module);
 }

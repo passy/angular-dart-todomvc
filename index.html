@@ -15,9 +15,8 @@
 		<section todo-controller id="todoapp">
 			<header id="header">
 				<h1>todos</h1>
-				<!-- Oh boy, there is no ng-submit yet. :( -->
-				<form id="todo-form" ng-submit="todo.add()" onsubmit="return false">
-					<input id="new-todo" placeholder="What needs to be done?" ng-model="todo.newItem" autofocus>
+				<form id="todo-form" todo-submit="todo.add()">
+					<input type="text" id="new-todo" placeholder="What needs to be done?" ng-model="todo.newItem.title" autofocus>
 				</form>
 			</header>
 			<section id="main" ng-show="todo.items.length" ng-cloak>
@@ -30,7 +29,7 @@
 							<label ng-dblclick="editTodo(todo)">{{item.title}}</label>
 							<button class="destroy" ng-click="removeTodo(todo)"></button>
 						</div>
-						<form ng-submit="doneEditing(todo)">
+						<form todo-submit="doneEditing(todo)">
 							<input class="edit" ng-trim="false" ng-model="item.title" todo-escape="revertEditing(item)" todo-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
 						</form>
 					</li>
@@ -53,7 +52,7 @@
 					</li>
 				</ul>
 				-->
-				<button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="todo.completed() > 0">Clear completed ({{todo.completed()}})</button>
+				<button id="clear-completed" ng-click="clearCompletedTodos()" ng-if="todo.completed() > 0">Clear completed ({{todo.completed()}})</button>
 			</footer>
 		</section>
 		<footer id="info">
