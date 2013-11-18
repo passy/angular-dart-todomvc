@@ -19,7 +19,7 @@
 					<input type="text" id="new-todo" placeholder="What needs to be done?" ng-model="todo.newItem.title" autofocus>
 				</form>
 			</header>
-			<section id="main" ng-show="todo.items.length" ng-cloak>
+			<section id="main" ng-if="todo.total()" ng-cloak>
 				<input id="toggle-all" type="checkbox" ng-model="todo.allChecked">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul id="todo-list">
@@ -27,7 +27,7 @@
 						<div class="view">
 							<input class="toggle" type="checkbox" ng-model="item.done">
 							<label ng-dblclick="editTodo(todo)">{{item.title}}</label>
-							<button class="destroy" ng-click="removeTodo(todo)"></button>
+							<button class="destroy" ng-click="todo.remove(item)"></button>
 						</div>
 						<form todo-submit="doneEditing(todo)">
 							<input class="edit" ng-trim="false" ng-model="item.title" todo-escape="revertEditing(item)" todo-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
@@ -52,7 +52,7 @@
 					</li>
 				</ul>
 				-->
-				<button id="clear-completed" ng-click="clearCompletedTodos()" ng-if="todo.completed() > 0">Clear completed ({{todo.completed()}})</button>
+				<button id="clear-completed" ng-click="todo.clearCompleted()" ng-if="todo.completed() > 0">Clear completed ({{todo.completed()}})</button>
 			</footer>
 		</section>
 		<footer id="info">

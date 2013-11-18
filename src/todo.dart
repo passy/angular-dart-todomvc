@@ -57,6 +57,18 @@ class TodoController {
 		}
 	}
 	
+	void remove(Item item) {
+		items.remove(item);
+	}
+	
+	void clearCompleted() {
+		items.forEach((i) {
+			if (i.done) {
+				items.remove(i);
+			}
+		});
+	}
+	
 	int remaining() {
 		return items.where((item) => !item.done).length;
 	}
