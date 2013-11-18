@@ -69,6 +69,14 @@ class TodoController {
 		return items.length;
 	}
 	
+	bool get allChecked {
+		return items.every((i) => i.done);
+	}
+	
+	void set allChecked(value) {
+		items.forEach((i) => i.done = value);
+	}
+	
 	String get itemsLeftText {
 		return 'item' + (remaining() != 1 ? 's' : '') + ' left';
 	}
