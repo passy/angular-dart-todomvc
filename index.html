@@ -24,21 +24,20 @@
 				<input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul id="todo-list">
-					<li ng-repeat="todo in todo.items | filter:statusFilter" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+					<li ng-repeat="item in todo.items | filter:statusFilter" ng-class="{completed: item.done, editing: item == editedTodo}">
 						<div class="view">
-							<input class="toggle" type="checkbox" ng-model="todo.completed">
-							<label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+							<input class="toggle" type="checkbox" ng-model="item.done">
+							<label ng-dblclick="editTodo(todo)">{{item.title}}</label>
 							<button class="destroy" ng-click="removeTodo(todo)"></button>
 						</div>
 						<form ng-submit="doneEditing(todo)">
-							<input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" todo-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
+							<input class="edit" ng-trim="false" ng-model="item.title" todo-escape="revertEditing(item)" todo-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
 						</form>
 					</li>
 				</ul>
 			</section>
 			<footer id="footer" ng-hide="!todo.total()" ng-cloak>
-				<span id="todo-count" ng-hide="{{!todo.remaining()}}"><strong>{{todo.remaining()}}</strong>
-					<ng-pluralize count="todo.items" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+				<span id="todo-count" ng-hide="{{!todo.remaining()}}"><strong>{{todo.remaining()}}</strong> {{todo.itemsLeftText}}
 				</span>
 				<!--
 				TODO: Routing :)
