@@ -31,6 +31,28 @@ class TodoSubmitDirective {
 	}
 }
 
+@NgDirective(
+	// ng-submit is eventually going to be added, using `todo-` as prefix will
+	// avoid future name clashes.
+	selector: '[todo-focus]',
+	map: const {'todo-focus': '@todoFocus'}
+)
+class TodoFocusDirective {
+	Map listeners = {};
+	final dom.Element element;
+	final Scope scope;
+
+	TodoFocusDirective(dom.Element this.element, Scope this.scope);
+
+	set todoFocus(watchExpr) {
+		scope.$watch(watchExpr, (value) {
+			if (value) {
+				element.focus();
+			}
+		});
+	}
+}
+
 class Item {
 	String title;
 	bool done;
@@ -38,6 +60,10 @@ class Item {
 	Item([String this.title = '', bool this.done = false]);
 	
 	bool get isEmpty => title.isEmpty;
+
+	Item clone() => new Item(this.title, this.done);
+
+	String toString() => done ? "[X]" : "[ ]" + " ${this.title}";
 }
 
 @NgDirective(
@@ -48,6 +74,8 @@ class TodoController {
 	// TODO: Read from localStorage
 	List<Item> items = [new Item("wow", false)];
 	Item newItem = new Item();
+	Item editedItem = null;
+	Item previousItem = null;
 	
 	void add() {
 		if (!newItem.isEmpty) {
@@ -92,5 +120,16 @@ class TodoController {
 	
 	String get itemsLeftText {
 		return 'item' + (remaining() != 1 ? 's' : '') + ' left';
+	}
+
+	void editTodo(Item item) {
+		editedItem = item;
+		previousItem = item.clone();
+	}
+
+	void doneEditing(Item item) {
+		print("Saving $item...");
+		editedItem = null;
+		previousItem = null;
 	}
 }
