@@ -109,11 +109,7 @@ class TodoController {
 	}
 	
 	void clearCompleted() {
-		items.forEach((i) {
-			if (i.done) {
-				items.remove(i);
-			}
-		});
+		items.removeWhere((i) => i.done);
 	}
 	
 	int remaining() {

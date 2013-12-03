@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>AngularJS • TodoMVC</title>
+		<title>Dart + AngularJS • TodoMVC</title>
 		<link rel="stylesheet" href="bower_components/todomvc-common/base.css">
 		<style>
 			[ng-cloak] { display: none; }
@@ -36,7 +36,7 @@
 				</ul>
 			</section>
 			<footer id="footer" ng-hide="!todo.total()" ng-cloak>
-				<span id="todo-count" ng-hide="{{!todo.remaining()}}"><strong>{{todo.remaining()}}</strong> {{todo.itemsLeftText}}
+				<span id="todo-count"><strong>{{todo.remaining()}}</strong> {{todo.itemsLeftText}}
 				</span>
 				<!--
 				TODO: Routing :)
