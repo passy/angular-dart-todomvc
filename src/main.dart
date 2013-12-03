@@ -8,7 +8,7 @@ main() {
 
 	var module = new Module()
 		..type(TodoController)
-		..type(TodoSubmitDirective)
+		..type(TodoDOMEventDirective)
 		..type(TodoFocusDirective);
 
 	ngBootstrap(module: module);

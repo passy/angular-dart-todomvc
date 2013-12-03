@@ -9,25 +9,36 @@ import 'package:angular/angular.dart';
 	selector: '[todo-submit]',
 	map: const {'todo-submit': '&onSubmit'}
 )
-class TodoSubmitDirective {
+@NgDirective(
+	selector: '[todo-escape]',
+	map: const {'todo-escape': '&onEscape'}
+)
+class TodoDOMEventDirective {
 	Map listeners = {};
 	final dom.Element element;
 	final Scope scope;
-
-	TodoSubmitDirective(dom.Element this.element, Scope this.scope);
 	
-	set onSubmit(value) {
-		print("registering submit handler for " + value.toString());
-		var stream = element.onSubmit;
+	static final int ESCAPE_KEY = 27;
+
+	TodoDOMEventDirective(dom.Element this.element, Scope this.scope);
+
+	void initHandler(stream, value, [bool predicate(event)]) {
 		final int key = stream.hashCode;
 		
 		if (!listeners.containsKey(key)) {
 			listeners[key] = value;
 			stream.listen((event) => scope.$apply(() {
-				event.preventDefault();
-				value({r"$event": event});
+				if (predicate == null || predicate(event)) {
+					event.preventDefault();
+					value({r"$event": event});
+				}
 			}));
 		}
+	}
+
+	set onSubmit(value) => initHandler(element.onSubmit, value);
+	set onEscape(value) {
+		initHandler(element.onKeyDown, value, (event) => event.keyCode == ESCAPE_KEY);
 	}
 }
 
@@ -127,9 +138,14 @@ class TodoController {
 		previousItem = item.clone();
 	}
 
-	void doneEditing(Item item) {
-		print("Saving $item...");
+	void doneEditing() {
 		editedItem = null;
+		previousItem = null;
+	}
+
+	void revertEditing(Item item) {
+		editedItem = null;
+		item.title = previousItem.title;
 		previousItem = null;
 	}
 }
