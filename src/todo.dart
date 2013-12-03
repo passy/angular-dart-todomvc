@@ -1,6 +1,7 @@
 library todo;
 
 import 'dart:html' as dom;
+import 'dart:json' as json;
 import 'package:angular/angular.dart';
 
 @NgDirective(
@@ -16,6 +17,10 @@ import 'package:angular/angular.dart';
 @NgDirective(
 	selector: '[todo-escape]',
 	map: const {'todo-escape': '&onEscape'}
+)
+@NgDirective(
+	selector: '[todo-focus]',
+	map: const {'todo-focus': '@todoFocus'}
 )
 class TodoDOMEventDirective {
 	Map listeners = {};
@@ -47,20 +52,6 @@ class TodoDOMEventDirective {
 	}
 
 	set onDblclick(value) => initHandler(element.onDoubleClick, value);
-}
-
-@NgDirective(
-	// ng-submit is eventually going to be added, using `todo-` as prefix will
-	// avoid future name clashes.
-	selector: '[todo-focus]',
-	map: const {'todo-focus': '@todoFocus'}
-)
-class TodoFocusDirective {
-	Map listeners = {};
-	final dom.Element element;
-	final Scope scope;
-
-	TodoFocusDirective(dom.Element this.element, Scope this.scope);
 
 	set todoFocus(watchExpr) {
 		scope.$watch(watchExpr, (value) {
@@ -89,12 +80,18 @@ class Item {
 	publishAs: 'todo'
 )
 class TodoController {
-	// TODO: Read from localStorage
-	List<Item> items = [new Item("wow", false)];
+	List<Item> items;
 	Item newItem = new Item();
 	Item editedItem = null;
 	Item previousItem = null;
 	
+	static final String STORAGE_KEY = "todomvc_dartangular";
+
+	TodoController() {
+		// TODO: Should be a service, seperate class or something like that.
+		this.items = json.parse(dom.window.localStorage[STORAGE_KEY] || '[]');
+	}
+
 	void add() {
 		if (!newItem.isEmpty) {
 			items.add(newItem);
