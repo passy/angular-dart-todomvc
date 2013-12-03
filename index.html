@@ -25,12 +25,12 @@
 				<ul id="todo-list">
 					<li ng-repeat="item in todo.items | filter:statusFilter" ng-class="{completed: item.done, editing: item == todo.editedItem}">
 						<div class="view" ng-hide="item == todo.editedItem">
-							<input class="toggle" type="checkbox" ng-model="item.done">
+							<input type="checkbox" class="toggle" ng-model="item.done">
 							<label ng-click="todo.editTodo(item)">{{item.title}}</label>
 							<button class="destroy" ng-click="todo.remove(item)"></button>
 						</div>
 						<form todo-submit="todo.doneEditing(item)">
-							<input class="edit" ng-trim="false" ng-model="item.title" todo-escape="todo.revertEditing(item)" ng-blur="todo.doneEditing(item)" todo-focus="item == todo.editedItem">
+							<input type="text" class="edit" ng-trim="false" ng-model="item.title" todo-escape="todo.revertEditing(item)" ng-blur="todo.doneEditing(item)" todo-focus="item == todo.editedItem">
 						</form>
 					</li>
 				</ul>
