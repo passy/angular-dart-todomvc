@@ -4,21 +4,22 @@ import 'dart:html' as dom;
 import 'package:angular/angular.dart';
 
 @NgDirective(
-	// ng-submit will eventually be added, using `todo-` as prefix will avoid
-	// future name clashes
+	// ng-submit is eventually going to be added, using `todo-` as prefix will
+	// avoid future name clashes.
 	selector: '[todo-submit]',
 	map: const {'todo-submit': '&onSubmit'}
 )
 class TodoSubmitDirective {
-	var listeners = {};
-	dom.Element element;
-	Scope scope;
+	Map listeners = {};
+	final dom.Element element;
+	final Scope scope;
+
 	TodoSubmitDirective(dom.Element this.element, Scope this.scope);
 	
 	set onSubmit(value) {
 		print("registering submit handler for " + value.toString());
 		var stream = element.onSubmit;
-		int key = stream.hashCode;
+		final int key = stream.hashCode;
 		
 		if (!listeners.containsKey(key)) {
 			listeners[key] = value;
