@@ -24,9 +24,9 @@
 				<label for="toggle-all">Mark all as complete</label>
 				<ul id="todo-list">
 					<li ng-repeat="item in todo.items | filter:statusFilter" ng-class="{completed: item.done, editing: item == todo.editedItem}">
-						<div class="view" ng-hide="item == todo.editedItem">
+						<div class="view">
 							<input type="checkbox" class="toggle" ng-model="item.done">
-							<label ng-click="todo.editTodo(item)">{{item.title}}</label>
+							<label todo-dblclick="todo.editTodo(item)">{{item.title}}</label>
 							<button class="destroy" ng-click="todo.remove(item)"></button>
 						</div>
 						<form todo-submit="todo.doneEditing(item)">
