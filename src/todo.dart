@@ -1,7 +1,7 @@
 library todo;
 
 import 'dart:html' as dom;
-import 'dart:json' as json;
+import 'dart:convert' as convert;
 import 'package:angular/angular.dart';
 
 @NgDirective(
@@ -68,11 +68,16 @@ class Item {
 	
 	Item([String this.title = '', bool this.done = false]);
 	
+	factory Item.fromJson(Map obj) => new Item(obj["title"], obj["done"]);
+
 	bool get isEmpty => title.isEmpty;
 
 	Item clone() => new Item(this.title, this.done);
 
 	String toString() => done ? "[X]" : "[ ]" + " ${this.title}";
+
+	// This is method is called when from JSON.encode.
+	Map toJson() => { "title": title, "done": done };
 }
 
 @NgDirective(
@@ -80,16 +85,28 @@ class Item {
 	publishAs: 'todo'
 )
 class TodoController {
-	List<Item> items;
+	List<Item> items = [];
 	Item newItem = new Item();
 	Item editedItem = null;
 	Item previousItem = null;
 	
-	static final String STORAGE_KEY = "todomvc_dartangular";
+	static const String STORAGE_KEY = "todomvc_dartangular";
 
-	TodoController() {
+	TodoController(Scope scope) {
 		// TODO: Should be a service, seperate class or something like that.
-		this.items = json.parse(dom.window.localStorage[STORAGE_KEY] || '[]');
+		final String data = dom.window.localStorage[STORAGE_KEY];
+		print("data: $data");
+		if (data != null) {
+			print("decoding ...");
+			List<Map> rawItems = convert.JSON.decode(data);
+			this.items = rawItems.map((item) => new Item.fromJson(item)).toList();
+		}
+
+		scope.$watchCollection('todo.items', (c) {
+			var enc = convert.JSON.encode(c);
+			print("Saving stuff ... $enc");
+			dom.window.localStorage[STORAGE_KEY] = convert.JSON.encode(c);
+		});
 	}
 
 	void add() {

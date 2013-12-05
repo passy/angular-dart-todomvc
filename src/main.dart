@@ -8,8 +8,6 @@ main() {
 
 	var module = new Module()
 		..type(TodoController)
-		..type(TodoDOMEventDirective)
-		..type(TodoFocusDirective);
-
+		..type(TodoDOMEventDirective);
 	ngBootstrap(module: module);
 }
