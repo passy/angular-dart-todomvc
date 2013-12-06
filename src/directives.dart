@@ -20,11 +20,11 @@ import 'package:angular/angular.dart';
 	map: const {'todo-focus': '@todoFocus'}
 )
 class TodoDOMEventDirective {
-	Map listeners = {};
+	final Map<int, Function> listeners = {};
 	final dom.Element element;
 	final Scope scope;
 	
-	static final int ESCAPE_KEY = 27;
+	static const int ESCAPE_KEY = 27;
 	
 	TodoDOMEventDirective(dom.Element this.element, Scope this.scope);
 	
@@ -36,7 +36,7 @@ class TodoDOMEventDirective {
 			stream.listen((event) => scope.$apply(() {
 				if (predicate == null || predicate(event)) {
 					event.preventDefault();
-					value({r"$event": event});
+					value({r'$event': event});
 				}
 			}));
 		}
@@ -44,11 +44,11 @@ class TodoDOMEventDirective {
 	
 	set onSubmit(value) => initHandler(element.onSubmit, value);
 	
+	set onDblclick(value) => initHandler(element.onDoubleClick, value);
+
 	set onEscape(value) {
 		initHandler(element.onKeyDown, value, (event) => event.keyCode == ESCAPE_KEY);
 	}
-	
-	set onDblclick(value) => initHandler(element.onDoubleClick, value);
 	
 	set todoFocus(watchExpr) {
 		scope.$watch(watchExpr, (value) {
