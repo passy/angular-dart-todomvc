@@ -4,71 +4,16 @@ import 'dart:html' as dom;
 import 'dart:convert' as convert;
 import 'package:angular/angular.dart';
 
-@NgDirective(
-	// ng-submit is eventually going to be added, using `todo-` as prefix will
-	// avoid future name clashes.
-	selector: '[todo-submit]',
-	map: const {'todo-submit': '&onSubmit'}
-)
-@NgDirective(
-	selector: '[todo-dblclick]',
-	map: const {'todo-dblclick': '&onDblclick'}
-)
-@NgDirective(
-	selector: '[todo-escape]',
-	map: const {'todo-escape': '&onEscape'}
-)
-@NgDirective(
-	selector: '[todo-focus]',
-	map: const {'todo-focus': '@todoFocus'}
-)
-class TodoDOMEventDirective {
-	Map listeners = {};
-	final dom.Element element;
-	final Scope scope;
-	
-	static final int ESCAPE_KEY = 27;
-
-	TodoDOMEventDirective(dom.Element this.element, Scope this.scope);
-
-	void initHandler(stream, value, [bool predicate(event)]) {
-		final int key = stream.hashCode;
-		
-		if (!listeners.containsKey(key)) {
-			listeners[key] = value;
-			stream.listen((event) => scope.$apply(() {
-				if (predicate == null || predicate(event)) {
-					event.preventDefault();
-					value({r"$event": event});
-				}
-			}));
-		}
-	}
-
-	set onSubmit(value) => initHandler(element.onSubmit, value);
-
-	set onEscape(value) {
-		initHandler(element.onKeyDown, value, (event) => event.keyCode == ESCAPE_KEY);
-	}
-
-	set onDblclick(value) => initHandler(element.onDoubleClick, value);
-
-	set todoFocus(watchExpr) {
-		scope.$watch(watchExpr, (value) {
-			if (value) {
-				element.focus();
-			}
-		});
-	}
-}
-
 class Item {
 	String title;
 	bool done;
 	
 	Item([String this.title = '', bool this.done = false]);
 	
-	factory Item.fromJson(Map obj) => new Item(obj["title"], obj["done"]);
+	Item.fromJson(Map obj) {
+		this.title = obj["title"];
+		this.done = obj["done"];
+	}
 
 	bool get isEmpty => title.trim().isEmpty;
 
@@ -101,14 +46,12 @@ class TodoController {
 		final String data = dom.window.localStorage[STORAGE_KEY];
 		print("data: $data");
 		if (data != null) {
-			print("decoding ...");
 			List<Map> rawItems = convert.JSON.decode(data);
 			this.items = rawItems.map((item) => new Item.fromJson(item)).toList();
 		}
 
 		scope.$watchCollection('todo.items', (c) {
 			var enc = convert.JSON.encode(c);
-			print("Saving stuff ... $enc");
 			dom.window.localStorage[STORAGE_KEY] = convert.JSON.encode(c);
 		});
 	}
@@ -161,7 +104,11 @@ class TodoController {
 	}
 
 	void doneEditing() {
-		if (editedItem != null && editedItem.isEmpty) {
+		if (editedItem == null) {
+			return;
+		}
+
+		if (editedItem.isEmpty) {
 			items.remove(editedItem);
 		}
 
