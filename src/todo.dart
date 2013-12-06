@@ -70,11 +70,15 @@ class Item {
 	
 	factory Item.fromJson(Map obj) => new Item(obj["title"], obj["done"]);
 
-	bool get isEmpty => title.isEmpty;
+	bool get isEmpty => title.trim().isEmpty;
 
 	Item clone() => new Item(this.title, this.done);
 
 	String toString() => done ? "[X]" : "[ ]" + " ${this.title}";
+
+	void normalize() {
+		this.title = this.title.trim();
+	}
 
 	// This is method is called when from JSON.encode.
 	Map toJson() => { "title": title, "done": done };
@@ -111,6 +115,7 @@ class TodoController {
 
 	void add() {
 		if (!newItem.isEmpty) {
+			newItem.normalize();
 			items.add(newItem);
 			newItem = new Item();
 		} else {
@@ -160,6 +165,7 @@ class TodoController {
 			items.remove(editedItem);
 		}
 
+		editedItem.normalize();
 		editedItem = null;
 		previousItem = null;
 	}
