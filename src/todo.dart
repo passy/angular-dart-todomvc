@@ -7,7 +7,7 @@ import 'package:angular/angular.dart';
 
 class StorageService {
 	final dom.Storage _storage = dom.window.localStorage;
-	static const String STORAGE_KEY = "todomvc_dartangular";
+	static const String STORAGE_KEY = 'todomvc_dartangular';
 
 	List<Item> loadItems() {
 		final String data = _storage[STORAGE_KEY];
@@ -33,22 +33,22 @@ class Item {
 	Item([String this.title = '', bool this.done = false]);
 	
 	Item.fromJson(Map obj) {
-		this.title = obj["title"];
-		this.done = obj["done"];
+		this.title = obj['title'];
+		this.done = obj['done'];
 	}
 
 	bool get isEmpty => title.trim().isEmpty;
 
 	Item clone() => new Item(this.title, this.done);
 
-	String toString() => done ? "[X]" : "[ ]" + " ${this.title}";
+	String toString() => done ? '[X]' : '[ ]' + ' ${this.title}';
 
 	void normalize() {
 		title = title.trim();
 	}
 
 	// This is method is called when from JSON.encode.
-	Map toJson() => { "title": title, "done": done };
+	Map toJson() => { 'title': title, 'done': done };
 }
 
 
@@ -62,12 +62,18 @@ class TodoController {
 	Item editedItem = null;
 	Item previousItem = null;
 	
+	StorageService _storageService;
+
 	TodoController(Scope scope, StorageService storage) {
 		items = storage.loadItems();
-		scope.$watchCollection('todo.items', (collection) {
-			print("Saving collection.");
-			storage.saveItems(collection);
-		});
+		_storageService = storage;
+
+		// Save all items if one got inserted or removed.
+		scope.$watchCollection('todo.items', save);
+	}
+
+	void save() {
+		_storageService.saveItems(items);
 	}
 
 	void add() {
@@ -76,7 +82,7 @@ class TodoController {
 			items.add(newItem);
 			newItem = new Item();
 		} else {
-			print("Item is empty: " + newItem.title);
+			print('Item is empty: ' + newItem.title);
 		}
 	}
 	
@@ -129,6 +135,10 @@ class TodoController {
 		editedItem.normalize();
 		editedItem = null;
 		previousItem = null;
+
+		// Our $watchCollection listener from above isn't notified when an
+		// item is edit, so we manually trigger the saving here.
+		save();
 	}
 
 	void revertEditing(Item item) {
