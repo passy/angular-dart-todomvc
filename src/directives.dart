@@ -45,7 +45,7 @@ class TodoDOMEventDirective {
 	set onSubmit(value) => initHandler(element.onSubmit, value);
 	
 	set onDblclick(value) => initHandler(element.onDoubleClick, value);
-
+	
 	set onEscape(value) {
 		initHandler(element.onKeyDown, value, (event) => event.keyCode == ESCAPE_KEY);
 	}
