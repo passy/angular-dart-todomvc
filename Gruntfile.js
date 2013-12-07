@@ -2,6 +2,8 @@
 'use strict';
 
 module.exports = function (grunt) {
+	require('time-grunt')(grunt);
+
 	grunt.initConfig({
 		copy: {
 			packages: {
@@ -14,12 +16,22 @@ module.exports = function (grunt) {
 			options: {
 				dart2js_bin: 'dart2js'
 			},
-			dist: {
+			dev: {
 				expand: true,
 				cwd: 'src',
 				src: 'main.dart',
 				dest: 'dist/',
 				ext: '.js'
+			},
+			dist: {
+				options: {
+					minify: true
+				},
+				expand: true,
+				cwd: 'src',
+				src: 'main.dart',
+				dest: 'dist/',
+				ext: '.js',
 			}
 		},
 		watch: {
@@ -28,7 +40,7 @@ module.exports = function (grunt) {
 			},
 			dart: {
 				files: ['src/{,*/}*.dart'],
-				tasks: ['dart2js']
+				tasks: ['dart2js:dev']
 			},
 			livereload: {
 				files: ['index.html', '**/*.css']
@@ -55,6 +67,7 @@ module.exports = function (grunt) {
 		'watch'
 	]);
 	grunt.registerTask('default', [
-		'dart2js'
+		'copy',
+		'dart2js:dist'
 	]);
   };
