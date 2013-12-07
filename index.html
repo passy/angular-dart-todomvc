@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" ng-app>
+<html lang="en" ng-app data-framework="angulardart">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>angular.dart • TodoMVC</title>
+		<title>AngularDart • TodoMVC</title>
 		<link rel="stylesheet" href="bower_components/todomvc-common/base.css">
 		<style>
 			[ng-cloak] { display: none; }
@@ -46,8 +46,9 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 		<script src="bower_components/todomvc-common/base.js"></script>
+		<!-- Use this include if you want to run this in Dartium.
 		<script src="src/main.dart" type="application/dart"></script>
-		<script src="packages/browser/dart.js"></script>
-		<script src="packages/browser/interop.js"></script>
+		-->
+		<script src="dist/main.js"></script>
 	</body>
 </html>
