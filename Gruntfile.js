@@ -3,14 +3,21 @@
 
 module.exports = function (grunt) {
 	grunt.initConfig({
+		copy: {
+			packages: {
+				expand: true,
+				src: 'packages/**',
+				dest: 'src/'
+			}
+		},
 		dart2js: {
 			options: {
-				dart2js_bin: "dart2js"
+				dart2js_bin: 'dart2js'
 			},
 			dist: {
 				expand: true,
 				cwd: 'src',
-				src: '{,*/}*.dart',
+				src: 'main.dart',
 				dest: 'dist/',
 				ext: '.js'
 			}
@@ -41,6 +48,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-dart2js');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	grunt.registerTask('serve', [
 		'connect',
