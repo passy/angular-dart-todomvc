@@ -29,7 +29,7 @@
 							<label todo-dblclick="todo.editTodo(item)">{{item.title}}</label>
 							<button class="destroy" ng-click="todo.remove(item)"></button>
 						</div>
-						<form todo-submit="todo.doneEditing(item)">
+						<form todo-submit="todo.doneEditing()">
 							<input type="text" class="edit" ng-trim="false" ng-model="item.title" todo-escape="todo.revertEditing(item)" ng-blur="todo.doneEditing()" todo-focus="item == todo.editedItem">
 						</form>
 					</li>

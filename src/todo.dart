@@ -77,13 +77,13 @@ class TodoController {
 	}
 
 	void add() {
-		if (!newItem.isEmpty) {
-			newItem.normalize();
-			items.add(newItem);
-			newItem = new Item();
-		} else {
-			print('Item is empty: ' + newItem.title);
+		if (newItem.isEmpty) {
+			return;
 		}
+
+		newItem.normalize();
+		items.add(newItem);
+		newItem = new Item();
 	}
 
 	void remove(Item item) {
