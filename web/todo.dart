@@ -7,7 +7,7 @@ import 'package:angular/angular.dart';
 
 class StorageService {
 	final dom.Storage _storage = dom.window.localStorage;
-	static const String STORAGE_KEY = 'todomvc_dartangular';
+	static const String STORAGE_KEY = 'todos-angulardart';
 
 	List<Item> loadItems() {
 		final String data = _storage[STORAGE_KEY];

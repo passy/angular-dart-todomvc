@@ -23,14 +23,12 @@ class TodoDOMEventDirective {
 	final Map<int, Function> listeners = {};
 	final dom.Element element;
 	final Scope scope;
-	
-	static const int ESCAPE_KEY = 27;
-	
-	TodoDOMEventDirective(dom.Element this.element, Scope this.scope);
-	
+
+	TodoDOMEventDirective(this.element, this.scope);
+
 	void initHandler(stream, value, [bool predicate(event)]) {
 		final int key = stream.hashCode;
-		
+
 		if (!listeners.containsKey(key)) {
 			listeners[key] = value;
 			stream.listen((event) => scope.$apply(() {
@@ -41,15 +39,16 @@ class TodoDOMEventDirective {
 			}));
 		}
 	}
-	
+
 	set onSubmit(value) => initHandler(element.onSubmit, value);
-	
+
 	set onDblclick(value) => initHandler(element.onDoubleClick, value);
-	
+
 	set onEscape(value) {
-		initHandler(element.onKeyDown, value, (event) => event.keyCode == ESCAPE_KEY);
+		initHandler(element.onKeyDown, value, (event) => event.keyCode ==
+				dom.KeyCode.ESC);
 	}
-	
+
 	set todoFocus(watchExpr) {
 		scope.$watch(watchExpr, (value) {
 			if (value) {
