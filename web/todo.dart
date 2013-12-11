@@ -68,7 +68,9 @@ class TodoController {
 		items = storage.loadItems();
 		_storageService = storage;
 
-		// Save all items if one got inserted or removed.
+		// Since there is no native support for deeply watching collections, we
+		// instead watch over the JSON-serialized string representing the items.
+		// While hugely inefficient, this is a very simple work-around.
 		scope.$watch((Scope scope) => convert.JSON.encode(items), save);
 	}
 
