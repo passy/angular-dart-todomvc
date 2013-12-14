@@ -30,7 +30,7 @@ class Item {
 	String title;
 	bool completed;
 
-	Item([String this.title = '', bool this.completed = false]);
+	Item([this.title = '', this.completed = false]);
 
 	Item.fromJson(Map obj) {
 		this.title = obj['title'];
